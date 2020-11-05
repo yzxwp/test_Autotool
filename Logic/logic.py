@@ -13,10 +13,14 @@ class demo():
     def __init__(self):
         self.root = Tk()
         self.root.title("自动生成测试数据小工具")  # 设置窗口标题
-        dd.center_window(self.root, 350, 270)
+        # self.root.attributes("-toolwindow", 1)
+        dd.center_window(self.root, 340, 280)
         self.way()
 
     def way(self):
+        #全部刷新
+        Button(self.root, text='重新获取全部数据：', command=self.text_all).grid(row=8, column=2, sticky=W)
+
         # 用户姓名
         self.lab_name = Label(self.root, text='用 户  姓 名 ：').grid(row=0, column=1)
         self.text_name = Text(self.root, height=1, width=20)
@@ -106,6 +110,24 @@ class demo():
     def text_bank_non1(self):
         self.text_bank_non.delete('0.0', END)
         self.text_bank_non.insert('0.0', bank_card.gen_bank_card_nonghang())
+
+    def text_all(self):
+            self.text_name.delete('0.0', END)
+            self.text_name.insert('0.0', name.random_name())
+            self.text_phone.delete('0.0', END)
+            self.text_phone.insert('0.0', phone.phone_num())
+            self.text_idcard.delete('0.0', END)
+            self.text_idcard.insert('0.0', id_card.main())
+            self.text_tyshzxm.delete('0.0', END)
+            self.text_tyshzxm.insert('0.0', id_credit.create_social_credit())
+            self.text_zzjgdm.delete('0.0', END)
+            self.text_zzjgdm.insert('0.0', id_credit.create_organization())
+            self.text_vin.delete('0.0', END)
+            self.text_vin.insert('0.0', vin.random_vin())
+            self.text_bank_gon.delete('0.0', END)
+            self.text_bank_gon.insert('0.0', bank_card.gen_bank_card_gonghang())
+            self.text_bank_non.delete('0.0', END)
+            self.text_bank_non.insert('0.0', bank_card.gen_bank_card_nonghang())
 
 if __name__ == '__main__':
     demo()
