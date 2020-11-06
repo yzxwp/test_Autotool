@@ -38,7 +38,7 @@ class demo():
         # 身份证号码
         self.lab_idcard = Label(self.root, text='身 份 证 号 码 ：').grid(row=2, column=1)
         self.text_idcard = Text(self.root, height=1, width=20)
-        self.text_idcard.insert('0.0', id_card.main())
+        self.text_idcard.insert('0.0', id_card.ident_generator())
         self.text_idcard.grid(row=2, column=2, sticky=W)
         self.text_idcard_click = Button(self.root, text='重新获取：',command=self.text_idcard1).grid(row=2, column=3, sticky=W)
 
@@ -89,7 +89,7 @@ class demo():
 
     def text_idcard1(self):
         self.text_idcard.delete('0.0', END)
-        self.text_idcard.insert('0.0',id_card.main())
+        self.text_idcard.insert('0.0',id_card.ident_generator())
 
     def  text_tyshzxm1(self):
         self.text_tyshzxm.delete('0.0', END)
@@ -117,7 +117,7 @@ class demo():
             self.text_phone.delete('0.0', END)
             self.text_phone.insert('0.0', phone.phone_num())
             self.text_idcard.delete('0.0', END)
-            self.text_idcard.insert('0.0', id_card.main())
+            self.text_idcard.insert('0.0', id_card.ident_generator())
             self.text_tyshzxm.delete('0.0', END)
             self.text_tyshzxm.insert('0.0', id_credit.create_social_credit())
             self.text_zzjgdm.delete('0.0', END)

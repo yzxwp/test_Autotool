@@ -1,72 +1,29 @@
-import random
-import time
+import random, datetime
 
 
-def regiun():
-    '''生成身份证前六位'''
-    # 列表里面的都是一些地区的前六位号码
-    first_list = ['362402', '362421', '362422', '362423', '362424', '362425', '362426', '362427', '362428', '362429',
-                  '362430', '362432', '110100', '110101', '110102', '110103', '110104', '110105', '110106', '110107',
-                  '110108', '110109', '110111']
-    first = random.choice(first_list)
-    return first
+def ident_generator():
+    # 身份证号的前两位，省份代号
+    sheng = (
+    '11', '12', '13', '14', '15', '21', '22', '23', '31', '32', '33', '34', '35', '36', '37', '41', '42', '43', '44',
+    '45', '46', '50', '51', '52', '53', '54', '61', '62', '63', '64', '65', '66')
 
+    # 随机选择距离今天在7000到25000的日期作为出生日期（没有特殊要求我就随便设置的，有特殊要求的此处可以完善下）
+    birthdate = (datetime.date.today() - datetime.timedelta(days=random.randint(7000, 25000)))
 
-def year():
-    '''生成年份'''
-    now = time.strftime('%Y')
-    # 1948为第一代身份证执行年份,now-18直接过滤掉小于18岁出生的年份
-    second = random.randint(1948, int(now) - 18)
-    age = int(now) - second
-    # print('随机生成的身份证人员年龄为：'+str(age))
-    return second
+    # 拼接出身份证号的前17位（第3-第6位为市和区的代码，中国太大此处就偷懒了写了定值，有要求的可以做个随机来完善下；第15-第17位为出生的顺序码，随机在100到199中选择）
+    ident = sheng[random.randint(0, 31)] + '0101' + birthdate.strftime("%Y%m%d") + str(random.randint(100, 199))
 
+    # 前17位每位需要乘上的系数，用字典表示，比如第一位需要乘上7，最后一位需要乘上2
+    coe = {1: 7, 2: 9, 3: 10, 4: 5, 5: 8, 6: 4, 7: 2, 8: 1, 9: 6, 10: 3, 11: 7, 12: 9, 13: 10, 14: 5, 15: 8, 16: 4,
+           17: 2}
+    summation = 0
 
-def month():
-    '''生成月份'''
-    three = random.randint(1, 12)
-    # 月份小于10以下，前面加上0填充
-    if three < 10:
-        three = '0' + str(three)
-        return three
-    else:
-        return three
+    # for循环计算前17位每位乘上系数之后的和
+    for i in range(17):
+        summation = summation + int(ident[i:i + 1]) * coe[i + 1]  # ident[i:i+1]使用的是python的切片获得每位数字
 
+    # 前17位每位乘上系数之后的和除以11得到的余数对照表，比如余数是0，那第18位就是1
+    key = {0: '1', 1: '0', 2: 'X', 3: '9', 4: '8', 5: '7', 6: '6', 7: '5', 8: '4', 9: '3', 10: '2'}
 
-def day():
-    '''生成日期'''
-    four = random.randint(1, 31)
-    # 日期小于10以下，前面加上0填充
-    if four < 10:
-        four = '0' + str(four)
-        return four
-    else:
-        return four
-
-
-def randoms():
-    '''生成身份证后四位'''
-    # 后面序号低于相应位数，前面加上0填充
-    five = random.randint(1, 9999)
-    if five < 10:
-        five = '000' + str(five)
-        return five
-    elif 10 < five < 100:
-        five = '00' + str(five)
-        return five
-    elif 100 < five < 1000:
-        five = '0' + str(five)
-        return five
-    else:
-        return five
-
-
-def main():
-    first = regiun()
-    second = year()
-    three = month()
-    four = day()
-    last = randoms()
-    IDcard = str(first) + str(second) + str(three) + str(four) + str(last)
-    # print('随机生成的身份证号码为：'+IDcard)
-    return IDcard
+    # 拼接得到完整的18位身份证号
+    return ident + key[summation % 11]
